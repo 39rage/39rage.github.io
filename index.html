@@ -2,192 +2,142 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Portal Page</title>
-    <link rel="icon" href="https://fromtheasia.com/wp-content/uploads/6410224d7e21cc6e2a9eb0cf659e7eb4.png" type="image/png">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- ★ブラウザのタブ名を「39rage」のみに変更しました -->
+    <title>39rage</title>
+    <!-- ファビコン設定（クラゲの画像を指定） -->
+    <link rel="icon" href="https://64.media.tumblr.com/3798e5568544434743b7bc635c4b539a/tumblr_pd6q45nJAl1xci1k0o1_1280.png" type="image/png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --qurage-main: #ff8c00;
-            --sakurage-main: #00d4ff;
-            --sacra-main: #9370db;
-        }
-
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        
-        html, body {
-            height: 100%;
-            width: 100%;
-            margin: 0;
-            overflow: hidden; 
-            background-color: #000;
-            color: #fff;
+        body {
+            margin: 0; padding: 0;
+            background-color: #e0f2fe; color: #0f172a;
             font-family: 'Inter', 'Noto Sans JP', sans-serif;
-            display: flex;
-            flex-direction: column;
+            min-height: 100vh; display: flex; flex-direction: column;
         }
 
-        /* セレクトコンテナ：画面全体（タイトルエリア分を空ける） */
-        .select-container {
-            display: flex;
-            width: 100%;
-            height: 100%;
-            position: relative;
-            z-index: 1;
+        /* 共通ヘッダー */
+        header {
+            width: 100%; max-width: 1400px;
+            margin: 0 auto; padding: 30px 40px;
+            box-sizing: border-box;
+            display: flex; justify-content: space-between; align-items: center;
+            z-index: 100; position: relative;
         }
 
-        /* タイトルエリア：画面下部に配置 */
-        .title-area {
-            text-align: center;
-            padding: 40px 20px 60px; /* 下に少し余裕を持たせる */
-            width: 100%;
-            z-index: 10;
-            pointer-events: none;
-            position: absolute;
-            bottom: 0; left: 0;
-            /* 下から上へグラデーション */
-            background: linear-gradient(to top, rgba(0,0,0,0.9) 20%, transparent);
+        .header-logo {
+            color: #0f172a; text-decoration: none;
+            font-size: 1.6rem; font-weight: 700;
+            letter-spacing: 0.05em; transition: opacity 0.2s;
         }
-        .title-area h1 {
-            font-size: 1.1rem;
-            font-weight: 700;
-            letter-spacing: 0.8em;
-            text-transform: uppercase;
-            text-shadow: 0 0 20px rgba(0,0,0,1);
-        }
+        .header-logo:hover { opacity: 0.7; }
 
-        .panel {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-decoration: none;
-            position: relative;
-            overflow: hidden;
-            transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+        .nav-links { display: flex; gap: 30px; }
+        .nav-btn {
+            color: #0f172a; text-decoration: none; font-weight: 700;
+            font-size: 0.95rem; letter-spacing: 0.1em;
+            position: relative; padding-bottom: 4px;
+        }
+        .nav-btn::after {
+            content: ''; position: absolute; width: 100%; transform: scaleX(0);
+            height: 2px; bottom: 0; left: 0; background-color: #0f172a;
+            transform-origin: bottom right; transition: transform 0.25s ease-out;
+        }
+        .nav-btn:hover::after { transform: scaleX(1); transform-origin: bottom left; }
+
+        .menu-toggle {
+            display: none; flex-direction: column; gap: 6px;
+            background: none; border: none; cursor: pointer; padding: 0;
+        }
+        .menu-toggle span {
+            display: block; width: 25px; height: 3px; background-color: #0f172a;
+            transition: all 0.3s ease;
         }
 
-        .panel-bg {
-            position: absolute;
-            inset: 0;
-            background-size: cover !important;
-            background-position: center !important;
-            transition: transform 1.5s ease;
-            z-index: 1;
+        /* メインレイアウト */
+        .main-layout { flex: 1; display: flex; width: 100%; align-items: center; justify-content: space-between; box-sizing: border-box; }
+        
+        /* 左側（テキスト）：全体の40%の幅に設定 */
+        .profile-text-side { flex: 4; padding: 0 5% 60px 8%; text-align: left; box-sizing: border-box; }
+        .profile-text-side h1 { font-size: 3.5rem; letter-spacing: 0.05em; margin: 0 0 15px 0; font-weight: 700; }
+        .profile-text-side .description { color: #475569; font-size: 1.05rem; margin: 0 0 40px 0; letter-spacing: 0.05em; font-weight: 500; line-height: 1.8; }
+        
+        .sns-links { display: flex; gap: 25px; }
+        .sns-link { color: #0f172a; text-decoration: none; font-size: 1.8rem; font-weight: 400; transition: opacity 0.2s; line-height: 1; }
+        .sns-link:hover { opacity: 0.6; }
+
+        /* 右側（画像枠）：全体の60%の幅に拡張 */
+        .profile-image-side { flex: 6; height: 80vh; display: flex; justify-content: flex-end; }
+        
+        .profile-img { 
+            width: 100%; height: 100%; 
+            border-radius: 0; border: none; 
+            object-fit: cover; 
+            box-shadow: -10px 0 30px rgba(15, 23, 42, 0.05); 
         }
 
-        .panel-overlay {
-            position: absolute;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.65);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            transition: all 0.7s ease;
-            z-index: 2;
+        /* 中央揃えフッター */
+        footer { 
+            padding: 30px 40px; text-align: center; 
+            font-size: 0.75rem; color: #64748b; letter-spacing: 0.1em; 
         }
 
-        /* ホバー：PCのみ */
-        @media (min-width: 769px) {
-            .panel:hover { flex: 2; }
-            .panel:hover .panel-bg { transform: scale(1.1); }
-            .panel:hover .panel-overlay { background: rgba(0, 0, 0, 0.2); backdrop-filter: blur(0px); }
-        }
-
-        .panel-content {
-            position: relative;
-            z-index: 3;
-            text-align: center;
-            width: 100%;
-            padding: 20px;
-        }
-
-        .name {
-            font-size: clamp(1.8rem, 5vw, 3.5rem);
-            font-weight: 900;
-            letter-spacing: 0.05em;
-            margin-bottom: 12px;
-            color: #ffffff;
-            text-shadow: 0 0 20px rgba(0,0,0,1), 0 0 10px rgba(0,0,0,1);
-        }
-
-        .desc {
-            display: inline-block;
-            font-size: 0.75rem;
-            letter-spacing: 0.2em;
-            font-weight: 900;
-            padding: 6px 18px;
-            border-radius: 50px;
-            color: #fff;
-            text-shadow: 0 1px 5px rgba(0,0,0,0.5);
-        }
-
-        .panel.qurage .desc { background-color: var(--qurage-main); }
-        .panel.sakurage .desc { background-color: var(--sakurage-main); }
-        .panel.sakura .desc { background-color: var(--sacra-main); }
-
-        .panel.qurage .panel-bg { background: url('https://fromtheasia.com/wp-content/uploads/NCG292.jpg'); }
-        .panel.sakurage .panel-bg { background: url('https://64.media.tumblr.com/3798e5568544434743b7bc635c4b539a/tumblr_pd6q45nJAl1xci1k0o1_1280.png'); }
-        .panel.sakura .panel-bg { background: url('https://fromtheasia.com/wp-content/uploads/NCG144.jpg'); }
-
-        /* スマホ専用修正 */
         @media (max-width: 768px) {
-            .select-container { flex-direction: column; }
-            .panel { border-bottom: 1px solid rgba(255,255,255,0.1); flex: 1; }
-            .panel:hover { flex: 1; }
+            header { padding: 25px 20px; }
+            .menu-toggle { display: flex; }
             
-            /* タイトルエリアを最下部へ */
-            .title-area { 
-                padding: 10px 10px calc(15px + env(safe-area-inset-bottom)); 
-                background: rgba(0,0,0,0.8);
+            .nav-links {
+                display: none;
+                flex-direction: column; gap: 20px; position: absolute;
+                top: 80px; left: 0; width: 100%; background-color: #e0f2fe;
+                padding: 20px 0; text-align: center; box-shadow: 0 10px 15px rgba(0,0,0,0.05);
             }
-            .title-area h1 { font-size: 0.8rem; letter-spacing: 0.4em; }
+            .nav-links.active { display: flex; }
 
-            /* 各コンテンツを少し上にずらしてバランスを取る */
-            .panel-content { transform: translateY(-15px); }
-            .name { font-size: 1.8rem; margin-bottom: 8px; }
-            .desc { font-size: 0.6rem; padding: 4px 15px; }
+            .main-layout { flex-direction: column-reverse; }
+            .profile-text-side { text-align: center; padding: 40px 20px; }
+            .profile-text-side h1 { font-size: 2.5rem; }
+            .sns-links { justify-content: center; }
+            .profile-image-side { width: 100%; height: 45vh; }
         }
     </style>
 </head>
 <body>
 
-    <div class="select-container">
-        <!-- Qurage -->
-        <a href="qurage/index.html" class="panel qurage" target="_blank" rel="noopener noreferrer">
-            <div class="panel-bg"></div>
-            <div class="panel-overlay"></div>
-            <div class="panel-content">
-                <div class="name">Qurage</div>
-                <div class="desc">BGM ARCHIVE</div>
+    <header>
+        <a href="index.html" class="header-logo">39rage</a>
+        <button class="menu-toggle" id="menuToggle">
+            <span></span><span></span><span></span>
+        </button>
+        <nav class="nav-links" id="navLinks">
+            <a href="about.html" class="nav-btn">ABOUT</a>
+            <a href="works.html" class="nav-btn">WORKS</a>
+            <a href="request.html" class="nav-btn">REQUEST</a>
+        </nav>
+    </header>
+
+    <main class="main-layout">
+        <div class="profile-text-side">
+            <h1>さくらげ</h1>
+            <p class="description">MIX / 動画編集 / デザイン / HP制作とか勉強中</p>
+            <div class="sns-links">
+                <a href="https://x.com/39rage" class="sns-link" target="_blank" rel="noopener noreferrer">ⓧ</a>
+                <a href="https://www.instagram.com/39rage" class="sns-link" target="_blank" rel="noopener noreferrer">ⓘ</a>
             </div>
-        </a>
+        </div>
+        <div class="profile-image-side">
+            <img src="https://64.media.tumblr.com/3798e5568544434743b7bc635c4b539a/tumblr_pd6q45nJAl1xci1k0o1_1280.png" alt="さくらげ" class="profile-img">
+        </div>
+    </main>
 
-        <!-- 39rage -->
-        <a href="39rage/index.html" class="panel sakurage" target="_blank" rel="noopener noreferrer">
-            <div class="panel-bg"></div>
-            <div class="panel-overlay"></div>
-            <div class="panel-content">
-                <div class="name">39rage</div>
-                <div class="desc">MIX & VIDEO EDIT</div>
-            </div>
-        </a>
+    <footer>
+        © 39rage. Powered by GitHub Pages.
+    </footer>
 
-        <!-- Sacra -->
-        <a href="https://3939-sacra.carrd.co/" class="panel sakura" target="_blank" rel="noopener noreferrer">
-            <div class="panel-bg"></div>
-            <div class="panel-overlay"></div>
-            <div class="panel-content">
-                <div class="name">Sacra</div>
-                <div class="desc">VOCALIST</div>
-            </div>
-        </a>
-    </div>
-
-    <!-- タイトルエリアをHTML構造的にも下に配置 -->
-    <div class="title-area">
-        <h1>WHICH PERSONA?</h1>
-    </div>
-
+    <script>
+        const menuToggle = document.getElementById('menuToggle');
+        const navLinks = document.getElementById('navLinks');
+        menuToggle.addEventListener('click', () => { navLinks.classList.toggle('active'); });
+    </script>
 </body>
 </html>
